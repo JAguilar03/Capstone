@@ -8,4 +8,23 @@ Star Shooter is a top-down sci-fi shooter game with pixel art that offers gamers
 
 # TO DO:
 
-Work on the Game Design Document (Create the setting and main characters)
+Improve on game now that basic prototype is complete, this includes but is not limited to:
+- Advanced Difficulty Scaling
+- Randomly Generated Levels
+- More Enemy Types
+- Multiplayer support
+- More weapon types
+
+# How to Play Star Shooter
+
+There is a Google Drive link found in the GameBuildLink.txt file that needs to be copied and pasted into the search bar. From there, Google will open up on the browser and the file will need to be downloaded through the website. After downloading the file, it will need to be extracted, to do this for Windows, locate and click on the downloaded zip file. Now that the file is highlighted, right-click and select Extract All on the pop-up window. Once the file is extracted, open the new file. Inside the GameBuild file, search for the Top-Down-Shooter-Capstone Application file, and run that file by double-clicking it. From there, Star Shooter should then launch and the start screen for the game shoud load.
+
+# Controls for Star Shooter
+
+Movement: WASD
+Aim: Mouse
+Shoot: 
+Switch Weapons: Q or E
+Melee Attack: Spacebar
+Grenade: Right Click
+Pause: Escape
