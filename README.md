@@ -21,10 +21,10 @@ There is a Google Drive link found in the GameBuildLink.txt file that needs to b
 
 # Controls for Star Shooter
 
-Movement: WASD
-Aim: Mouse
-Shoot: 
-Switch Weapons: Q or E
-Melee Attack: Spacebar
-Grenade: Right Click
-Pause: Escape
+- Movement: WASD
+- Aim: Mouse
+- Shoot: Left Click
+- Switch Weapons: Q or E
+- Melee Attack: Spacebar
+- Grenade: Right Click
+- Pause: Escape
