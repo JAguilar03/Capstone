@@ -10,7 +10,6 @@ Star Shooter is a top-down sci-fi shooter game with pixel art that offers gamers
 
 Improve on game now that basic prototype is complete, this includes but is not limited to:
 - Advanced Difficulty Scaling
-- Randomly Generated Levels
 - More Enemy Types
 - Multiplayer support
 - More weapon types
