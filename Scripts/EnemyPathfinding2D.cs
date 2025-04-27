@@ -7,6 +7,11 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Scripting.APIUpdating;
 
+// This script controls the enemy's movement, pathfinding, and combat behavior. 
+// The enemy chases the player within a certain range, attacks when close, and handles health and item drops upon death.
+// It uses Unity's NavMesh for pathfinding and adjusts the enemy's animations during movement and attack.
+
+
 public class EnemyPathfinding2D : MonoBehaviour
 {
     private ScoreManager scoreManager;
@@ -100,8 +105,9 @@ public class EnemyPathfinding2D : MonoBehaviour
             if (isDead) {
             // stop enemy movement
             movement = Vector2.zero;
-            transform.position += new Vector3(0, 0, 0.2f);
+            transform.position += new Vector3(0, 0, 0.0f);
             transform.rotation = Quaternion.identity;
+            agent.SetDestination(gameObject.transform.position);
             // toggle active states of collider and GOs
             transform.GetComponent<CircleCollider2D>().enabled = false;
             transform.GetChild(0).gameObject.SetActive(false);
@@ -129,14 +135,21 @@ public class EnemyPathfinding2D : MonoBehaviour
         rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
     }
 
+    //NOTE: Bullet damage logic has been moved to the bullet itself (will likely move melee later). This is so
+    //      things are more organized if/when we add other damage effects (e.g. hitscan, explosions)
     void OnTriggerEnter2D(Collider2D other) {
-        if (other.CompareTag("bullet")) {
-            // Debug.Log("Enemy hit by bullet");
-            health -= 5;
-            Destroy(other.gameObject);
-            checkHP();
-        }
-        else if (other.CompareTag("PlayerMelee")) {
+        // if (other.CompareTag("bullet")) {
+        //     // Debug.Log("Enemy hit by bullet");
+        //     health -= 5;
+        //     Destroy(other.gameObject);
+        //     checkHP();
+        // }
+        // else if (other.CompareTag("PlayerMelee")) {
+        //     health -= 5;
+        //     checkHP();
+        // }
+
+        if (other.CompareTag("PlayerMelee")) {
             health -= 5;
             checkHP();
         }

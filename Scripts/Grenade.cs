@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// This script controls the behavior of a grenade in the game, including its fuse time, explosion radius, and damage 
+// dealt to enemies and players within range. The grenade starts in flight and lands after a set time, at which point it 
+// will explode. The explosion checks for any entities in range and applies damage based on their exposure, considering 
+// any obstacles that may provide cover. An explosion particle is instantiated upon detonation, and the grenade is destroyed afterward.
+
 public class Grenade : MonoBehaviour
 {
     enum GrenadeState {inFlight, landed};

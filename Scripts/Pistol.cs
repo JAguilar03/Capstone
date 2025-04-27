@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using static PlayerMovement;
 
+// This script defines the behavior of a Pistol weapon in the game. It inherits from the Weapon class and
+// overrides necessary properties such as weapon animation set, trigger type (semi-automatic), and weapon ID 
+// (set to "pistol"). The fire() method handles the weapon's firing logic, including checking for cooldowns,
+// decrementing ammo, instantiating a bullet, calculating its direction based on the player's rotation, and 
+// applying velocity to the bullet. It also plays the gun's firing sound and manages the cooldown period 
+// before the weapon can be fired again.
+
 public class Pistol : Weapon
 {
     public override AnimSet weaponAnimSet { get { return AnimSet.Pistol; } }
@@ -22,6 +29,7 @@ public class Pistol : Weapon
         //Create bullet
         Bullet bullet = Instantiate(bulletPrefab);
         bullet.transform.position = bulletSpawnPoint.position;
+        bullet.damage = power; //Set bullet damage
         Rigidbody2D bulletRB = bullet.GetComponent<Rigidbody2D>();
 
         // Get the transform's global angle
@@ -34,7 +42,8 @@ public class Pistol : Weapon
         bulletRB.velocity = bulletDirection * bulletSpeed;
 
         // pew 
-        gunAudio.Play();
+        gunAudio.PlayOneShot(shootSound);
+        // gunAudio.Play();
 
         onCooldown = true;
         Invoke("readyToFire", fireDelay);

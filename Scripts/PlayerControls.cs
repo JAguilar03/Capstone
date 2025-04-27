@@ -89,20 +89,36 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Melee"",
+                    ""type"": ""Button"",
+                    ""id"": ""f34f52c4-42dd-4cd1-91c0-51c1afc16ac1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Debug Message"",
+                    ""type"": ""Button"",
+                    ""id"": ""e08ec0e1-24f0-47c7-bcb7-f2eb2518b693"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""EscapeAction"",
+                    ""type"": ""Button"",
+                    ""id"": ""94436780-33c3-45ed-8e7f-6e8670b1faae"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""28759412-324b-474b-82f4-ab307e1f40da"",
-                    ""path"": ""<Gamepad>/leftStick"",
-                    ""interactions"": """",
-                    ""processors"": ""StickDeadzone"",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": ""WASD"",
                     ""id"": ""7020737e-3752-42fa-b1db-7aacd80fdc36"",
@@ -157,6 +173,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""28759412-324b-474b-82f4-ab307e1f40da"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": ""StickDeadzone"",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
@@ -227,7 +254,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""067be72e-54a6-4bf9-abef-34ba43f7c82e"",
-                    ""path"": ""<Keyboard>/escape"",
+                    ""path"": ""<Keyboard>/p"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KBM"",
@@ -289,6 +316,50 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""Grenade"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""aa2236d2-6f64-4498-8849-6733af0cd2c1"",
+                    ""path"": ""<Keyboard>/numpad5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KBM"",
+                    ""action"": ""Debug Message"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cbb185a6-0bca-4bb7-8552-c68a8daaa1f1"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KBM"",
+                    ""action"": ""EscapeAction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5058df3b-e979-4eb7-a662-f08ba44f143a"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KBM"",
+                    ""action"": ""Melee"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""37cae9bd-ee56-4bf5-92b0-af23ae904728"",
+                    ""path"": ""<Gamepad>/rightStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Melee"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -332,6 +403,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Controls_NextWeapon = m_Controls.FindAction("Next Weapon", throwIfNotFound: true);
         m_Controls_Shoot = m_Controls.FindAction("Shoot", throwIfNotFound: true);
         m_Controls_Grenade = m_Controls.FindAction("Grenade", throwIfNotFound: true);
+        m_Controls_Melee = m_Controls.FindAction("Melee", throwIfNotFound: true);
+        m_Controls_DebugMessage = m_Controls.FindAction("Debug Message", throwIfNotFound: true);
+        m_Controls_EscapeAction = m_Controls.FindAction("EscapeAction", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -400,6 +474,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Controls_NextWeapon;
     private readonly InputAction m_Controls_Shoot;
     private readonly InputAction m_Controls_Grenade;
+    private readonly InputAction m_Controls_Melee;
+    private readonly InputAction m_Controls_DebugMessage;
+    private readonly InputAction m_Controls_EscapeAction;
     public struct ControlsActions
     {
         private @PlayerControls m_Wrapper;
@@ -411,6 +488,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @NextWeapon => m_Wrapper.m_Controls_NextWeapon;
         public InputAction @Shoot => m_Wrapper.m_Controls_Shoot;
         public InputAction @Grenade => m_Wrapper.m_Controls_Grenade;
+        public InputAction @Melee => m_Wrapper.m_Controls_Melee;
+        public InputAction @DebugMessage => m_Wrapper.m_Controls_DebugMessage;
+        public InputAction @EscapeAction => m_Wrapper.m_Controls_EscapeAction;
         public InputActionMap Get() { return m_Wrapper.m_Controls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -441,6 +521,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Grenade.started += instance.OnGrenade;
             @Grenade.performed += instance.OnGrenade;
             @Grenade.canceled += instance.OnGrenade;
+            @Melee.started += instance.OnMelee;
+            @Melee.performed += instance.OnMelee;
+            @Melee.canceled += instance.OnMelee;
+            @DebugMessage.started += instance.OnDebugMessage;
+            @DebugMessage.performed += instance.OnDebugMessage;
+            @DebugMessage.canceled += instance.OnDebugMessage;
+            @EscapeAction.started += instance.OnEscapeAction;
+            @EscapeAction.performed += instance.OnEscapeAction;
+            @EscapeAction.canceled += instance.OnEscapeAction;
         }
 
         private void UnregisterCallbacks(IControlsActions instance)
@@ -466,6 +555,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Grenade.started -= instance.OnGrenade;
             @Grenade.performed -= instance.OnGrenade;
             @Grenade.canceled -= instance.OnGrenade;
+            @Melee.started -= instance.OnMelee;
+            @Melee.performed -= instance.OnMelee;
+            @Melee.canceled -= instance.OnMelee;
+            @DebugMessage.started -= instance.OnDebugMessage;
+            @DebugMessage.performed -= instance.OnDebugMessage;
+            @DebugMessage.canceled -= instance.OnDebugMessage;
+            @EscapeAction.started -= instance.OnEscapeAction;
+            @EscapeAction.performed -= instance.OnEscapeAction;
+            @EscapeAction.canceled -= instance.OnEscapeAction;
         }
 
         public void RemoveCallbacks(IControlsActions instance)
@@ -510,5 +608,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnNextWeapon(InputAction.CallbackContext context);
         void OnShoot(InputAction.CallbackContext context);
         void OnGrenade(InputAction.CallbackContext context);
+        void OnMelee(InputAction.CallbackContext context);
+        void OnDebugMessage(InputAction.CallbackContext context);
+        void OnEscapeAction(InputAction.CallbackContext context);
     }
 }

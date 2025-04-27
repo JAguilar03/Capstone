@@ -1,5 +1,9 @@
 using UnityEngine;
 
+// This script creates a pulsing visual effect by smoothly scaling the GameObject over time.
+// It uses a sine wave to animate the scale, making the object grow and shrink rhythmically.
+// The effect is customizable using 'pulseSpeed' for the speed of the pulse and 'pulseAmount' for the scale intensity.
+
 public class PulseEffect : MonoBehaviour
 {
     public float pulseSpeed = 2f;  // Speed of the pulse (higher is faster)

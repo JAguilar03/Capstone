@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Base class for all weapon types. Handles shared weapon properties such as ammo management,
+// fire rate control, bullet spawning, and firing logic. Designed to be inherited by specific
+// weapon implementations (e.g., Rifle, Shotgun) which override the fire behavior and other properties.
+// Supports both semi-auto and automatic trigger types.
+
 public enum TriggerType {
     SemiAuto, //Weapon only fires on button press
     Auto, //Weapon fires on press/hold
@@ -22,6 +27,8 @@ public class Weapon : MonoBehaviour
 
     [SerializeField] protected float bulletSpeed = 10.0f;
 
+    [SerializeField] protected float power = 5.0f;
+
     public virtual TriggerType triggerType { get { return TriggerType.SemiAuto; } }
     public virtual string weaponID { get { return "invalid"; } }
 
@@ -29,6 +36,7 @@ public class Weapon : MonoBehaviour
     [SerializeField] protected Bullet bulletPrefab;
     [SerializeField] protected Transform bulletSpawnPoint;
     [SerializeField] protected AudioSource gunAudio;
+    [SerializeField] protected AudioClip shootSound;
 
     [Header("Dynamic")]
     [SerializeField] public bool onCooldown = false;

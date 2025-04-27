@@ -17,6 +17,7 @@ public class SaveDataManager : MonoBehaviour
         saveData = SaveData.Instance;
     }
 
+    // This is used to save the player's data to a file.
     public void SaveToFile()
     {
         string json = JsonUtility.ToJson(saveData);
@@ -28,6 +29,7 @@ public class SaveDataManager : MonoBehaviour
         }
     }
 
+    // This is used to load the player's data from a file.
     public void LoadFromFile()
     {
         string json = string.Empty;

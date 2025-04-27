@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// This script handles enemy attacks, toggling a hitbox for melee attacks or spawning a projectile (e.g., fireball) for ranged attacks.
+// The hitbox position and state are adjusted during the attack's start and end based on whether the attack is melee or ranged.
+
 public class EnemyAttacks : MonoBehaviour
 {
     public GameObject Enemy;

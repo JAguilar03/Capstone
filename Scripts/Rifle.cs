@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// This script defines the behavior of a rifle weapon, inheriting from a base Weapon class.
+// It handles automatic firing, cooldown management, ammo reduction, bullet instantiation, and applying velocity based on the player's rotation.
+// The rifle uses a specific animation set and plays a gunshot sound when firing.
+
 public class Rifle : Weapon
 {
     public override AnimSet weaponAnimSet { get { return AnimSet.Rifle; } }
@@ -21,6 +25,7 @@ public class Rifle : Weapon
         //Create bullet
         Bullet bullet = Instantiate(bulletPrefab);
         bullet.transform.position = bulletSpawnPoint.position;
+        bullet.damage = power; //Set bullet damage
         Rigidbody2D bulletRB = bullet.GetComponent<Rigidbody2D>();
 
         // Get the transform's global angle
@@ -33,7 +38,8 @@ public class Rifle : Weapon
         bulletRB.velocity = bulletDirection * bulletSpeed;
 
         // pew 
-        gunAudio.Play();
+        gunAudio.PlayOneShot(shootSound);
+        // gunAudio.Play();
 
         onCooldown = true;
         Invoke("readyToFire", fireDelay);

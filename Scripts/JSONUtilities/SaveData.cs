@@ -29,6 +29,7 @@ public class SaveData
         }
     }
 
+    // We set the current HP and max HP to 100
     private SaveData()
     {
         this.currentHP = 100;

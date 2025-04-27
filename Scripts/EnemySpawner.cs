@@ -1,8 +1,15 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 
+// This script manages the spawning of enemies in the game. It randomly selects an enemy type based on spawn weights 
+// and spawns them at various spawn points. The script ensures that the total number of enemies does not exceed a 
+// specified limit and that enemies spawn outside the camera view or too close to the camera. It also handles enemy 
+// removal and updates the enemy count when an enemy dies.
+
 [Serializable]
+// This class represents an enemy type with its associated prefab, spawn weight, maximum count, and current count.
 public class EnemyType
 {
     public GameObject enemyPrefab;
@@ -12,10 +19,11 @@ public class EnemyType
     public int currentCount = 0;
 }
 
+// This class manages the spawning of enemies in the game. It randomly selects an enemy type based on spawn weights
 public class EnemySpawner : MonoBehaviour
 {
     public EnemyType[] enemyTypes;
-    public Transform[] spawnPoints;
+    public List<Transform> spawnPoints;
     public float spawnInterval = 5f;
     public int maxTotalEnemies = 10;
     public float minSpawnDistanceFromCamera = 10f;
@@ -23,12 +31,31 @@ public class EnemySpawner : MonoBehaviour
     private int currentTotalEnemies = 0;
     private Camera mainCamera;
 
+    public bool isBSP = false;
+
+    // This method is called when the script is initialized. It initializes the main camera and starts the coroutine for spawning enemies.
     void Start()
     {
         mainCamera = Camera.main;
-        StartCoroutine(SpawnEnemies());
+        if (!isBSP) {
+            StartCoroutine(SpawnEnemies());
+        }
     }
 
+    void LateUpdate() 
+    {
+        // If BSP is enabled, add spawn points from GameObjects with the "EnemySpawn" tag
+        if (isBSP) {
+            foreach(GameObject go in GameObject.FindGameObjectsWithTag("EnemySpawn")) {
+                spawnPoints.Add(go.transform);
+            }
+            StartCoroutine(SpawnEnemies());
+            isBSP = false;
+        }
+    }
+
+
+    // This coroutine spawns enemies at random spawn points at regular intervals.
     bool IsSpawnPointVisible(Vector3 spawnPosition)
     {
         Vector3 viewportPoint = mainCamera.WorldToViewportPoint(spawnPosition);
@@ -41,6 +68,7 @@ public class EnemySpawner : MonoBehaviour
         return inCameraView || distanceToCamera < minSpawnDistanceFromCamera;
     }
 
+    // This method selects a random enemy type based on spawn weights.
     EnemyType SelectRandomEnemyType()
     {
         float totalWeight = 0;
@@ -66,6 +94,7 @@ public class EnemySpawner : MonoBehaviour
         return null;
     }
 
+    // This coroutine spawns enemies at random spawn points at regular intervals.
     IEnumerator SpawnEnemies()
     {
         while (true)
@@ -78,7 +107,7 @@ public class EnemySpawner : MonoBehaviour
                 {
                     for (int attempts = 0; attempts < 10; attempts++)
                     {
-                        int randomSpawnPoint = UnityEngine.Random.Range(0, spawnPoints.Length);
+                        int randomSpawnPoint = UnityEngine.Random.Range(0, spawnPoints.Count);
                         Vector3 spawnPosition = spawnPoints[randomSpawnPoint].position;
 
                         if (!IsSpawnPointVisible(spawnPosition))
@@ -95,6 +124,7 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+    // This method is called when an enemy dies. It decrements the total enemy count and updates the enemy count for the specific enemy type.
     public void OnEnemyDeath(GameObject enemyObject)
     {
         currentTotalEnemies--;

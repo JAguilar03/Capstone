@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// This script defines the Shotgun weapon behavior, inheriting from the base Weapon class.
+// It fires multiple pellet projectiles with randomized spread to simulate a shotgun blast.
+// Uses semi-auto trigger and includes cooldown, ammo check, and firing audio feedback.
+
 public class Shotgun : Weapon
 {
     [SerializeField] private int pelletCount = 8; // Number of pellets per shot
@@ -23,6 +27,7 @@ public class Shotgun : Weapon
         {
             Bullet bullet = Instantiate(bulletPrefab);
             bullet.transform.position = bulletSpawnPoint.position;
+            bullet.damage = power; //Set bullet damage
             Rigidbody2D bulletRB = bullet.GetComponent<Rigidbody2D>();
 
             // Get base angle from transform
@@ -41,7 +46,7 @@ public class Shotgun : Weapon
             bulletRB.velocity = bulletDirection * bulletSpeed;
         }
 
-        gunAudio.Play();
+        gunAudio.PlayOneShot(shootSound);
         onCooldown = true;
         Invoke("readyToFire", fireDelay);
     }

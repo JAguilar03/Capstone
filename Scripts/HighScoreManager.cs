@@ -3,6 +3,11 @@ using TMPro;
 using System.Collections.Generic;
 using System.Linq;
 
+// This script manages the high score system in the game, allowing scores from previous sessions to be saved, 
+// displayed, and updated. It retrieves the last score from PlayerPrefs and adds it to the high score list if applicable. 
+// The script maintains the top 5 high scores, displays them using TextMeshPro UI elements, and provides functionality 
+// for clearing the high scores. The high scores are stored in PlayerPrefs and are displayed in descending order.
+
 public class HighScoreManager : MonoBehaviour
 {
     public TextMeshProUGUI[] highScoreTexts; // Array of 5 TextMeshPro texts for displaying scores
@@ -23,6 +28,7 @@ public class HighScoreManager : MonoBehaviour
         DisplayHighScores();
     }
 
+    // Add high scores
     public void AddHighScore(int newScore)
     {
         // Get existing scores
@@ -41,6 +47,7 @@ public class HighScoreManager : MonoBehaviour
         DisplayHighScores();
     }
 
+    // Get high scores from PlayerPrefs
     public List<int> GetHighScores()
     {
         string scoresString = PlayerPrefs.GetString(HIGH_SCORES_KEY, "");
@@ -53,6 +60,7 @@ public class HighScoreManager : MonoBehaviour
             .ToList();
     }
 
+    // Save high scores to PlayerPrefs
     private void SaveHighScores(List<int> highScores)
     {
         string scoresString = string.Join(",", highScores);
@@ -60,6 +68,7 @@ public class HighScoreManager : MonoBehaviour
         PlayerPrefs.Save();
     }
 
+    // Display high scores
     private void DisplayHighScores()
     {
         List<int> highScores = GetHighScores();
@@ -73,6 +82,7 @@ public class HighScoreManager : MonoBehaviour
         }
     }
 
+    // Clear high scores
     public void ClearHighScores()
     {
         PlayerPrefs.DeleteKey(HIGH_SCORES_KEY);

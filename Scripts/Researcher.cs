@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+// This script controls a "Researcher" NPC that follows the player when nearby, then switches to a goal location.
+// It uses Unity's NavMeshAgent for 2D pathfinding and handles animations for walking, idling, and death.
+// The NPC spawns at a random spawn point tagged "ResearcherSpawn" and reacts to specific enemy triggers to play a death animation.
+
 public class Researcher : MonoBehaviour
 {
     public Transform player;          // Reference to the player's transform
@@ -30,7 +34,8 @@ public class Researcher : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        player = GameObject.Find("player").transform;
+        // player = GameObject.Find("player").transform;
+        player = PlayerManager.playerInstance.transform;
         agent = GetComponent<NavMeshAgent>();
 
          // Get all spawn points

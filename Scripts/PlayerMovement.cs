@@ -1,4 +1,4 @@
-// using System.Collections;
+using System.Collections;
 // using System.Collections.Generic;
 // using System.Numerics;
 using System;
@@ -8,15 +8,20 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using UnityEngine.InputSystem;
 
 
 using TMPro;
 
+// This script handles the player's movement, rotation, and interaction with various game mechanics (e.g., health, punching, and grenade throwing).
+// It includes functionality for handling both keyboard/mouse and gamepad input, as well as rotating the player to face the mouse or controller direction.
+// The script also manages health, damage, healing, and the player animation states for walking, punching, and dying.
+// Additionally, it handles pickups like health, ammo, weapons, and speed boosts, updating the player's state accordingly.
+
+
 public enum AnimSet { Pistol, Rifle }
 
 // [RequireComponent(typeof(CharacterController))]
-[RequireComponent(typeof(PlayerInput))]
+// [RequireComponent(typeof(PlayerInput))]
 public class PlayerMovement : MonoBehaviour
 {
     // player stats
@@ -25,7 +30,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private ScoreManager scoreManager;
     
 
-    public TextMeshProUGUI healthText;
+    // public TextMeshProUGUI healthText;
     private bool isPunching = false;
 
     // movement vars
@@ -55,31 +60,40 @@ public class PlayerMovement : MonoBehaviour
 
     //Controls
     // private CharacterController controller;
-    private PlayerControls playerControls;
-    private PlayerInput playerInput;
+    // private PlayerControls playerControls;
+    // private PlayerInput playerInput;
 
-    private bool isGamepad = false; //Is the current control scheme gamepad?
+    public bool isGamepad = false; //Is the current control scheme gamepad?
     private float controllerDeadzone = 0.1f;
 
     private void Awake()
     {
         // controller = GetComponent<CharacterController>();
-        playerControls = new PlayerControls();
-        playerInput = GetComponent<PlayerInput>();
+        // playerControls = new PlayerControls();
+        // playerInput = GetComponent<PlayerInput>();
+
+        // if (playerInput == null)
+        // {
+        //     Debug.LogWarning("PlayerInput was not assigned properly!");
+        // }
     }
 
     private void OnEnable()
     {
-        playerControls.Enable();
+        // playerControls.Enable();
+        // KeybindManager.
     }
 
     private void OnDisable()
     {
-        playerControls.Disable();
+        // playerControls.Disable();
     }
 
     void Update()
     {
+        //TODO: Probably a bad idea to run this every frame during the death animation.
+        //      It invokes a ton of functions to load the game over scene at once, which
+        //      leads to weird behavior.
         if (health <= 0) {
             rb.velocity = Vector2.zero;
             transform.rotation = Quaternion.identity;
@@ -95,13 +109,12 @@ public class PlayerMovement : MonoBehaviour
             PlayerPrefs.SetInt("LastScore", scoreManager.GetCurrentScore());
             PlayerPrefs.Save();
             
-
             // Load GameOver scene after 2 seconds
             Invoke("LoadGameOver", 2f);
             return;
         }
 
-        handleInput();
+        // handleInput();
         handleMovement();
         handleRotation();
 
@@ -112,23 +125,40 @@ public class PlayerMovement : MonoBehaviour
         mouse_pos.x = mouse_pos.x - object_pos.x;
         mouse_pos.y = mouse_pos.y - object_pos.y;
         angle = Mathf.Atan2(mouse_pos.y, mouse_pos.x) * Mathf.Rad2Deg;
+    }
 
-        if (Input.GetKeyDown(KeyCode.Space) && !isPunching) {
+    // void handleInput()
+    // {
+    //     // movement = playerControls.Controls.Movement.ReadValue<Vector2>();
+    //     // movement = KeybindManager.instance.ReadValue<Vector2>();
+    //     // aim = playerControls.Controls.Aim.ReadValue<Vector2>();
+    //     // Debug.Log(movement);
+    // }
+    public void setMovement(InputAction.CallbackContext context)
+    {
+        movement = context.ReadValue<Vector2>();
+    }
+
+    public void setAim(InputAction.CallbackContext context)
+    {
+        aim = context.ReadValue<Vector2>();
+    }
+
+    public void punch(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started && !isPunching) {
             isPunching = true;
             animateBody.Play("Player_PunchPistol");
             Invoke("EndPunch", 1f);
         }
     }
 
-    void handleInput()
-    {
-        movement = playerControls.Controls.Movement.ReadValue<Vector2>();
-        aim = playerControls.Controls.Aim.ReadValue<Vector2>();
-        // Debug.Log(movement);
-    }
-
     private void LoadGameOver()
     {
+        //Delete the player character and HUD, otherwise they will persist into the gameOver scene
+        Destroy(PlayerManager.playerInstance.gameObject);
+        Destroy(HUDManager.hudInstance.gameObject);
+
         SceneManager.LoadScene("GameOver");
     }
 
@@ -203,31 +233,36 @@ public class PlayerMovement : MonoBehaviour
         transform.right = mousePos - new Vector2(transform.position.x, transform.position.y);
     }
 
-    public void OnDeviceChange(PlayerInput pin)
-    {
-        // PlayerInput pin = GetComponent<PlayerInput>();
-        isGamepad = pin.currentControlScheme.Equals("Gamepad") ? true : false;
-    }
+    // public void OnDeviceChange()
+    // // public void OnDeviceChange(PlayerInput pin)
+    // {
+    //     PlayerInput pin = GetComponent<PlayerInput>();
+    //     isGamepad = pin.currentControlScheme.Equals("Gamepad") ? true : false;
+    // }
 
     void Start()
     {
-        UpdateHealthDisplay();
+        HUDManager.hudInstance.SetHealthDisplay(health);
+        KeybindManager.instance.updateRefs();
+        // UpdateHealthDisplay();
     }
 
-    private void UpdateHealthDisplay()
-    {
-        healthText.text = "Health: " + health.ToString();
-    }
+    // private void UpdateHealthDisplay()
+    // {
+    //     healthText.text = "Health: " + health.ToString();
+    // }
 
     public void TakeDamage(float damage)
     {
         health = Mathf.Max(0, health - damage);
-        UpdateHealthDisplay();
+        HUDManager.hudInstance.SetHealthDisplay(health);
+        // UpdateHealthDisplay();
     }  
 
     public void HealDamage(float heal) {
         health = Mathf.Min(100, health + heal);
-        UpdateHealthDisplay();
+        HUDManager.hudInstance.SetHealthDisplay(health);
+        // UpdateHealthDisplay();
     }
 
     private void EndPunch()
@@ -252,8 +287,17 @@ public class PlayerMovement : MonoBehaviour
         }
         if (other.CompareTag("AmmoPack")) {
             // Debug.Log("Player picked up Ammo Pack");
-            // logic to add ammo to reserves goes here
             weaponController.pickupAmmo();
+            Destroy(other.gameObject);
+        }
+        if (other.CompareTag("WeaponPickup")) {
+            // Debug.Log("Player picked up Ammo Pack");
+            weaponController.addWeapon(other.GetComponent<WeaponPickup>().GetWeapon(), true);
+            Destroy(other.gameObject);
+        }
+        if (other.CompareTag("SpeedPack")) {
+            // Debug.Log("Player picked up Speed Pack");
+            StartCoroutine(SpeedBoost(2f, 5f));
             Destroy(other.gameObject);
         }
     }
@@ -265,5 +309,11 @@ public class PlayerMovement : MonoBehaviour
         if (context.phase != InputActionPhase.Started) return;
 
         Instantiate<GameObject>(grenadePrefab, transform.position, transform.rotation);
+    }
+
+    IEnumerator SpeedBoost(float multiplier, float duration) {
+        moveSpeed *= multiplier; 
+        yield return new WaitForSeconds(duration);
+        moveSpeed /= multiplier; 
     }
 }
